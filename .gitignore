@@ -4,6 +4,7 @@
 /**/.settings/
 /**/target
 /**/bin
+/**/obj
 
 # Visual Studio Generated
 .antlr

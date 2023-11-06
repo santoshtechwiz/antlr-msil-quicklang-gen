@@ -178,15 +178,24 @@ public class QuickLangMSILCodeGenerator : QuickLangBaseVisitor<object>
 
     public override object VisitTerm([NotNull] QuickLangParser.TermContext context)
     {
-        return context switch
-        {
-            { identifier: { } } when localStack.Contains(context.GetText()) => sb.AppendLine($"ldloc {context.GetText()}"),
-            { identifier: { } } => Visit(context.identifier),
-            { integer: { } } => Visit(context.integer),
-            _ => null
-        };
-    }
+        //if variable is a local variable then load it from stack 
 
+        if (localStack.Contains(context.GetText()))
+        {
+            return sb.AppendLine("ldloc " + context.GetText());
+        }
+
+        //if term is of type identifier then visit identifier
+        if (context.identifier() != null)
+        {
+            return Visit(context.identifier());
+        }
+        //if term is of type integer then visit integer
+        else
+        {
+            return Visit(context.integer());
+        }
+    }
 
     // assignstmt      : 
     //             NAME ASSIGN expression SEMICOLON 
